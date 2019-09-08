@@ -64,12 +64,6 @@ namespace API.Business.Implementation
             return repository.Filter(filter);
         }
 
-        protected virtual IQueryable<TEntity> OrderByFromRepository(Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy)
-        {
-            var repository = GetRepository();
-            return repository.OrderBy(orderBy);
-        }
-
         protected virtual IQueryable<TEntity> IncludeFromRepository(params Expression<Func<TEntity, object>>[] includeProperties)
         {
             var repository = GetRepository();

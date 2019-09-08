@@ -16,7 +16,5 @@ namespace API.Data.Interfaces
         IQueryable<T> Include(params Expression<Func<T, object>>[] includeProperties);
 
         IQueryable<T> Filter(Expression<Func<T, bool>> filter);
-
-        IQueryable<T> OrderBy(Func<IQueryable<T>, IOrderedQueryable<T>> orderBy);
     }
 }

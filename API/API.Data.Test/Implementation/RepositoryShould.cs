@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using API.Data.Interfaces;
 using API.Domain.Entities.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using Xunit;
 
 namespace API.Data.Test.Implementation
@@ -26,11 +26,6 @@ namespace API.Data.Test.Implementation
         protected abstract TRepository CreateRepository(APIDbContext inMemoryDbContext);
 
         protected abstract TKey CreateKey(bool other = false);
-
-        protected virtual Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> CreateOrderByFunc()
-        {
-            return w => w.OrderBy(q => q.Id);
-        }
 
         protected void Commit()
         {
@@ -181,23 +176,6 @@ namespace API.Data.Test.Implementation
 
             // assert
             Assert.Equal(entityId, result.Single().Id);
-        }
-
-        [Fact]
-        public async Task ReturnOrderedEntitiesWithGivenOrder()
-        {
-            // arrange
-            var entityId = CreateKey();
-            var entityId2 = CreateKey(true);
-            await Add(entityId);
-            await Add(entityId2);
-            Commit();
-
-            // act
-            var result = await Repository.OrderBy(CreateOrderByFunc()).Select(e => e.Id).ToListAsync();
-
-            // assert
-            Assert.Equal(new object[] { entityId, entityId2 }, result);
         }
 
         [Fact]

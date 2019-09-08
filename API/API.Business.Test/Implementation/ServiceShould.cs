@@ -67,11 +67,6 @@ namespace API.Business.Test.Implementation
                 return await Task.FromResult(FilterFromRepository(filter));
             }
 
-            public async Task<IEnumerable<TInternalEntity>> OrderBy(Func<IQueryable<TInternalEntity>, IOrderedQueryable<TInternalEntity>> orderBy)
-            {
-                return await Task.FromResult(OrderByFromRepository(orderBy));
-            }
-
             public async Task<IEnumerable<TInternalEntity>> Include(params Expression<Func<TInternalEntity, object>>[] includeProperties)
             {
                 return await Task.FromResult(IncludeFromRepository(includeProperties));
@@ -348,19 +343,6 @@ namespace API.Business.Test.Implementation
 
             // assert
             Repository.Verify(repo => repo.Filter(It.Is<Expression<Func<TEntity, bool>>>(matcher => matcher == filterExpression)));
-        }
-
-        [Fact]
-        public async Task CallOrderByMethodFromRepositoryWhenUsingInternalOrderByMethod()
-        {
-            // arrange
-            var mockedOrderByExpression = new Mock<Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>>();
-
-            // act
-            await _service.OrderBy(mockedOrderByExpression.Object);
-
-            // assert
-            Repository.Verify(repo => repo.OrderBy(It.Is<Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>>(matcher => matcher == mockedOrderByExpression.Object)));
         }
 
         [Fact]

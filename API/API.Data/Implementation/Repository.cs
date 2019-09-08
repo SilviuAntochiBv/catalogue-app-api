@@ -86,11 +86,6 @@ namespace API.Data.Implementation
             return DbSet.Filter(filter);
         }
 
-        public IQueryable<T> OrderBy(Func<IQueryable<T>, IOrderedQueryable<T>> orderBy)
-        {
-            return DbSet.OrderBy(orderBy);
-        }
-
         public IQueryable<T> Include(params Expression<Func<T, object>>[] includeProperties)
         {
             return DbSet.IncludeProperties(includeProperties);

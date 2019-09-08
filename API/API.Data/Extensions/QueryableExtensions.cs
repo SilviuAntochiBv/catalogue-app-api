@@ -8,12 +8,6 @@ namespace API.Data.Extensions
 {
     public static class QueryableExtensions
     {
-        public static IQueryable<T> OrderBy<T>(this IQueryable<T> query, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy)
-            where T : class, IBaseEntity
-        {
-            return orderBy != null ? orderBy(query) : query;
-        }
-
         public static IQueryable<T> Filter<T>(this IQueryable<T> query, Expression<Func<T, bool>> filter)
             where T : class, IBaseEntity
         {
