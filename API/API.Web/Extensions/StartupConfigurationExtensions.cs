@@ -23,7 +23,7 @@ namespace API.Web.Extensions
 
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "TemplateService API");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Catalogue API");
                 c.RoutePrefix = string.Empty;
             });
         }

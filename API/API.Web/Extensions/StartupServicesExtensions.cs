@@ -44,9 +44,9 @@ namespace API.Web.Extensions
                 options.DescribeAllEnumsAsStrings();
                 options.SwaggerDoc("v1", new Swashbuckle.AspNetCore.Swagger.Info
                 {
-                    Title = "WebAPI Template", // TODO: modify
+                    Title = "Catalogue API", // TODO: modify
                     Version = "v1", // TODO: modify
-                    Description = "WebAPI Template", // TODO: modify
+                    Description = "Full API for a catalogue application", // TODO: modify
                     TermsOfService = "Terms Of Service"
                 });
             });
@@ -95,7 +95,11 @@ namespace API.Web.Extensions
 
         private static void RegisterValidators(this IServiceCollection services)
         {
-            services.AddScoped<IValidator<BaseEntity<long>>, ExampleValidator>();
+            services.AddScoped<IValidator<Class>, ClassValidator>();
+            services.AddScoped<IValidator<Course>, CourseValidator>();
+            services.AddScoped<IValidator<Student>, StudentValidator>();
+            services.AddScoped<IValidator<Subject>, SubjectValidator>();
+            services.AddScoped<IValidator<Teacher>, TeacherValidator>();
         }
     }
 }
