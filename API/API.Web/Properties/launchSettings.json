@@ -20,15 +20,9 @@
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {
-        "DRP_CF_HTTP_PORT": "10001",
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "applicationUrl": "http://localhost:5000"
-    },
-    "Development": {
-      "commandName": "Project",
-      "environmentVariables": {
-      }
     }
   }
 }
