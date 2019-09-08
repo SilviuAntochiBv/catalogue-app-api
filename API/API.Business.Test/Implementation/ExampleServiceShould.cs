@@ -8,6 +8,7 @@ using API.Business.Interfaces;
 using API.Data.Interfaces.Specific;
 using API.Domain.Entities;
 using Xunit;
+using API.Business.Test.Utilities;
 
 namespace API.Business.Test.Implementation
 {
@@ -21,7 +22,9 @@ namespace API.Business.Test.Implementation
         {
             _loggerMock = new Mock<ILogger<ExampleService>>();
 
-            _service = new ExampleService(UnitOfWork.Object, Validator.Object, Mapper.Instance, _loggerMock.Object);
+            var mapper = AutoMapperUtilities.Init();
+
+            _service = new ExampleService(UnitOfWork.Object, Validator.Object, mapper, _loggerMock.Object);
         }
 
         [Fact]

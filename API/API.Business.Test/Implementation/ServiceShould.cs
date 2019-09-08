@@ -99,7 +99,9 @@ namespace API.Business.Test.Implementation
              .Setup(uow => uow.GetRepository<TRepo>())
              .Returns(Repository.Object);
 
-            _service = new InternalService<TEntity, TRepo>(UnitOfWork.Object, Validator.Object, Mapper.Instance);
+            var mapper = AutoMapperUtilities.Init();
+
+            _service = new InternalService<TEntity, TRepo>(UnitOfWork.Object, Validator.Object, mapper);
         }
 
         [Fact]

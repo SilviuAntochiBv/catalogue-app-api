@@ -7,6 +7,8 @@ namespace API.Business.Test.Utilities
     {
         private static readonly object Lock;
 
+        private static IMapper Mapper;
+
         public static bool IsInitialiazed { get; set; }
 
         static AutoMapperUtilities()
@@ -15,21 +17,22 @@ namespace API.Business.Test.Utilities
             IsInitialiazed = false;
         }
 
-        public static void Init()
+        public static IMapper Init()
         {
             lock (Lock)
             {
-                if (IsInitialiazed)
+                if (!IsInitialiazed)
                 {
-                    return;
+                    var config = new MapperConfiguration(cfg =>
+                    {
+                        cfg.AddProfile<ExampleProfile>();
+                    });
+
+                    Mapper = config.CreateMapper();
+                    IsInitialiazed = true;
                 }
 
-                Mapper.Initialize(config =>
-                {
-                    config.AddProfile<ExampleProfile>();
-                });
-
-                IsInitialiazed = true;
+                return Mapper;
             }
         }
     }
