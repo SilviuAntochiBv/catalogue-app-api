@@ -2,7 +2,7 @@
 
 namespace API.Data.Interfaces.Specific
 {
-    public interface IExampleRepository : IRepository<BaseEntity<long>>
+    public interface IClassRepository : IRepository<Class>
     {
     }
 }

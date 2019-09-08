@@ -2,7 +2,6 @@
 using Moq;
 using API.Data.Implementation;
 using API.Data.Interfaces;
-using API.Data.Interfaces.Specific;
 using Xunit;
 
 namespace API.Data.Test.Implementation
@@ -41,10 +40,10 @@ namespace API.Data.Test.Implementation
         public void CallServiceProviderWhenGettingRepository()
         {
             // act
-            _unitOfWork.GetRepository<IExampleRepository>();
+            _unitOfWork.GetRepository<object>();
 
             // assert
-            _mockedServiceProvider.Verify(sp => sp.GetService(typeof(IExampleRepository)), Times.Once);
+            _mockedServiceProvider.Verify(sp => sp.GetService(typeof(object)), Times.Once);
         }
 
         [Fact]

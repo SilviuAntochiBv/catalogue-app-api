@@ -12,10 +12,12 @@ using API.Data.Interfaces;
 using API.Domain.Entities.Interfaces;
 using API.Domain.Interfaces;
 using Xunit;
+using Microsoft.Extensions.Logging;
 
 namespace API.Business.Test.Implementation
 {
-    public abstract class ServiceShould<TEntity, TRepo>
+    public abstract class ServiceShould<TService, TEntity, TRepo>
+        where TService: class
         where TEntity : class, IBaseEntity
         where TRepo : class, IRepository<TEntity>
     {
@@ -72,40 +74,44 @@ namespace API.Business.Test.Implementation
             }
         }
 
-        private readonly InternalService<TEntity, TRepo> _service;
+        private readonly InternalService<TEntity, TRepo> _internalService;
 
-        protected Mock<IUnitOfWork> UnitOfWork { get; }
+        protected Mock<ILogger<TService>> LoggerMock { get; }
 
-        protected Mock<IValidator<IBaseEntity>> Validator { get; }
+        protected Mock<IUnitOfWork> UnitOfWorkMock { get; }
 
-        protected Mock<TRepo> Repository { get; }
+        protected Mock<IValidator<IBaseEntity>> ValidatorMock { get; }
+
+        protected IMapper MapperInstance { get; }
+
+        protected Mock<TRepo> RepositoryMock { get; }
 
         protected ServiceShould()
         {
-            AutoMapperUtilities.Init();
-
             // startup
-            UnitOfWork = new Mock<IUnitOfWork>();
-            Validator = new Mock<IValidator<IBaseEntity>>();
-            Repository = new Mock<TRepo>();
+            UnitOfWorkMock = new Mock<IUnitOfWork>();
+            ValidatorMock = new Mock<IValidator<IBaseEntity>>();
+            RepositoryMock = new Mock<TRepo>();
 
-            UnitOfWork
+            UnitOfWorkMock
              .Setup(uow => uow.GetRepository<TRepo>())
-             .Returns(Repository.Object);
+             .Returns(RepositoryMock.Object);
 
-            var mapper = AutoMapperUtilities.Init();
+            MapperInstance = AutoMapperUtilities.Init();
 
-            _service = new InternalService<TEntity, TRepo>(UnitOfWork.Object, Validator.Object, mapper);
+            LoggerMock = new Mock<ILogger<TService>>();
+
+            _internalService = new InternalService<TEntity, TRepo>(UnitOfWorkMock.Object, ValidatorMock.Object, MapperInstance);
         }
 
         [Fact]
         public async Task CallRepositoryWhenCallingGetAll()
         {
             // act
-            await _service.GetAll();
+            await _internalService.GetAll();
 
             // assert
-            Repository.Verify(repo => repo.GetAll(), Times.Once);
+            RepositoryMock.Verify(repo => repo.GetAll(), Times.Once);
         }
 
         [Theory]
@@ -115,10 +121,10 @@ namespace API.Business.Test.Implementation
         public async Task CallRepositoryWhenCallingGetById(int id)
         {
             // act
-            await _service.GetById(id);
+            await _internalService.GetById(id);
 
             // assert
-            Repository.Verify(repo => repo.GetById(id), Times.Once);
+            RepositoryMock.Verify(repo => repo.GetById(id), Times.Once);
         }
 
         [Fact]
@@ -128,15 +134,15 @@ namespace API.Business.Test.Implementation
             var mockedEntity = new Mock<TEntity>();
             var entity = mockedEntity.Object;
 
-            Validator
+            ValidatorMock
                 .Setup(v => v.Validate(entity))
                 .Returns(new ValidationResult());
 
             // act
-            await _service.Add(entity);
+            await _internalService.Add(entity);
 
             // assert
-            Validator.Verify(v => v.Validate(entity), Times.Once);
+            ValidatorMock.Verify(v => v.Validate(entity), Times.Once);
         }
 
         [Fact]
@@ -148,15 +154,15 @@ namespace API.Business.Test.Implementation
             var validationResultMock = new Mock<ValidationResult>();
             validationResultMock.Setup(vrm => vrm.IsValid).Returns(true);
 
-            Validator
+            ValidatorMock
                 .Setup(v => v.Validate(entity))
                 .Returns(validationResultMock.Object);
 
             // act
-            await _service.Add(entity);
+            await _internalService.Add(entity);
 
             // assert
-            Repository.Verify(repo => repo.Add(entity), Times.Once);
+            RepositoryMock.Verify(repo => repo.Add(entity), Times.Once);
         }
 
         [Fact]
@@ -168,15 +174,15 @@ namespace API.Business.Test.Implementation
             var validationResultMock = new Mock<ValidationResult>();
             validationResultMock.Setup(vrm => vrm.IsValid).Returns(false);
 
-            Validator
+            ValidatorMock
                 .Setup(v => v.Validate(entity))
                 .Returns(validationResultMock.Object);
 
             // act
-            await _service.Add(entity);
+            await _internalService.Add(entity);
 
             // assert
-            Repository.Verify(repo => repo.Add(entity), Times.Never);
+            RepositoryMock.Verify(repo => repo.Add(entity), Times.Never);
         }
 
         [Fact]
@@ -186,15 +192,15 @@ namespace API.Business.Test.Implementation
             var mockedEntity = new Mock<TEntity>();
             var entity = mockedEntity.Object;
 
-            Validator
+            ValidatorMock
                 .Setup(v => v.Validate(entity))
                 .Returns(new ValidationResult());
 
             // act
-            await _service.Update(entity);
+            await _internalService.Update(entity);
 
             // assert
-            Validator.Verify(v => v.Validate(entity), Times.Once);
+            ValidatorMock.Verify(v => v.Validate(entity), Times.Once);
         }
 
         [Fact]
@@ -206,15 +212,15 @@ namespace API.Business.Test.Implementation
             var validationResultMock = new Mock<ValidationResult>();
             validationResultMock.Setup(vrm => vrm.IsValid).Returns(true);
 
-            Validator
+            ValidatorMock
                 .Setup(v => v.Validate(entity))
                 .Returns(validationResultMock.Object);
 
             // act
-            await _service.Update(entity);
+            await _internalService.Update(entity);
 
             // assert
-            Repository.Verify(repo => repo.Update(entity), Times.Once);
+            RepositoryMock.Verify(repo => repo.Update(entity), Times.Once);
         }
 
         [Fact]
@@ -226,15 +232,15 @@ namespace API.Business.Test.Implementation
             var validationResultMock = new Mock<ValidationResult>();
             validationResultMock.Setup(vrm => vrm.IsValid).Returns(false);
 
-            Validator
+            ValidatorMock
                 .Setup(v => v.Validate(entity))
                 .Returns(validationResultMock.Object);
 
             // act
-            await _service.Update(entity);
+            await _internalService.Update(entity);
 
             // assert
-            Repository.Verify(repo => repo.Update(entity), Times.Never);
+            RepositoryMock.Verify(repo => repo.Update(entity), Times.Never);
         }
 
         [Fact]
@@ -245,10 +251,10 @@ namespace API.Business.Test.Implementation
             var entity = mockedEntity.Object;
 
             // act
-            await _service.Delete(entity);
+            await _internalService.Delete(entity);
 
             // assert
-            Repository.Verify(repo => repo.Delete(entity), Times.Once);
+            RepositoryMock.Verify(repo => repo.Delete(entity), Times.Once);
         }
 
         [Theory]
@@ -258,10 +264,10 @@ namespace API.Business.Test.Implementation
         public async Task CallRepositoryForDeleteById(int id)
         {
             // act
-            await _service.DeleteById(id);
+            await _internalService.DeleteById(id);
 
             // assert
-            Repository.Verify(repo => repo.DeleteById(id), Times.Once);
+            RepositoryMock.Verify(repo => repo.DeleteById(id), Times.Once);
         }
 
         [Fact]
@@ -273,15 +279,15 @@ namespace API.Business.Test.Implementation
             var validationResultMock = new Mock<ValidationResult>();
             validationResultMock.Setup(vrm => vrm.IsValid).Returns(true);
 
-            Validator
+            ValidatorMock
                 .Setup(v => v.Validate(entity))
                 .Returns(validationResultMock.Object);
 
             // act
-            await _service.Add(entity);
+            await _internalService.Add(entity);
 
             // assert
-            UnitOfWork.Verify(uow => uow.Save(), Times.Once);
+            UnitOfWorkMock.Verify(uow => uow.Save(), Times.Once);
         }
 
         [Fact]
@@ -293,15 +299,15 @@ namespace API.Business.Test.Implementation
             var validationResultMock = new Mock<ValidationResult>();
             validationResultMock.Setup(vrm => vrm.IsValid).Returns(true);
 
-            Validator
+            ValidatorMock
                 .Setup(v => v.Validate(entity))
                 .Returns(validationResultMock.Object);
 
             // act
-            await _service.Update(entity);
+            await _internalService.Update(entity);
 
             // assert
-            UnitOfWork.Verify(uow => uow.Save(), Times.Once);
+            UnitOfWorkMock.Verify(uow => uow.Save(), Times.Once);
         }
 
         [Fact]
@@ -312,10 +318,10 @@ namespace API.Business.Test.Implementation
             var entity = mockedEntity.Object;
 
             // act
-            await _service.Delete(entity);
+            await _internalService.Delete(entity);
 
             // assert
-            UnitOfWork.Verify(uow => uow.Save(), Times.Once);
+            UnitOfWorkMock.Verify(uow => uow.Save(), Times.Once);
         }
 
         [Theory]
@@ -325,10 +331,10 @@ namespace API.Business.Test.Implementation
         public async Task CallSaveChangesAfterDeleteById(int id)
         {
             // act
-            await _service.DeleteById(id);
+            await _internalService.DeleteById(id);
 
             // assert
-            UnitOfWork.Verify(uow => uow.Save(), Times.Once);
+            UnitOfWorkMock.Verify(uow => uow.Save(), Times.Once);
         }
 
         [Fact]
@@ -338,10 +344,10 @@ namespace API.Business.Test.Implementation
             Expression<Func<TEntity, bool>> filterExpression = x => x.Id != null;
 
             // act
-            await _service.Filter(filterExpression);
+            await _internalService.Filter(filterExpression);
 
             // assert
-            Repository.Verify(repo => repo.Filter(It.Is<Expression<Func<TEntity, bool>>>(matcher => matcher == filterExpression)));
+            RepositoryMock.Verify(repo => repo.Filter(It.Is<Expression<Func<TEntity, bool>>>(matcher => matcher == filterExpression)));
         }
 
         [Fact]
@@ -351,10 +357,10 @@ namespace API.Business.Test.Implementation
             Expression<Func<TEntity, object>> includeExpression = x => x.Id;
 
             // act
-            await _service.Include(includeExpression);
+            await _internalService.Include(includeExpression);
 
             // assert
-            Repository.Verify(repo => repo.Include(It.Is<Expression<Func<TEntity, object>>>(matcher => matcher == includeExpression)));
+            RepositoryMock.Verify(repo => repo.Include(It.Is<Expression<Func<TEntity, object>>>(matcher => matcher == includeExpression)));
         }
     }
 }

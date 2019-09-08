@@ -12,7 +12,6 @@ using API.Data.Implementation.Specific;
 using API.Data.Interfaces;
 using API.Data.Interfaces.Specific;
 using API.Domain.Entities;
-using System.Diagnostics;
 
 namespace API.Web.Extensions
 {
@@ -73,7 +72,11 @@ namespace API.Web.Extensions
 
         private static void RegisterRepositories(this IServiceCollection services)
         {
-            services.AddScoped<IExampleRepository, ExampleRepository>();
+            services.AddScoped<IClassRepository, ClassRepository>();
+            services.AddScoped<ICourseRepository, CourseRepository>();
+            services.AddScoped<IStudentRepository, StudentRepository>();
+            services.AddScoped<ISubjectRepository, SubjectRepository>();
+            services.AddScoped<ITeacherRepository, TeacherRepository>();
         }
 
         private static void RegisterUnitOfWork(this IServiceCollection services)
@@ -83,7 +86,11 @@ namespace API.Web.Extensions
 
         private static void RegisterApplicationServices(this IServiceCollection services)
         {
-            services.AddScoped<IExampleService, ExampleService>();
+            services.AddScoped<IClassService, ClassService>();
+            services.AddScoped<ICourseService, CourseService>();
+            services.AddScoped<IStudentService, StudentService>();
+            services.AddScoped<ISubjectService, SubjectService>();
+            services.AddScoped<ITeacherService, TeacherService>();
         }
 
         private static void RegisterValidators(this IServiceCollection services)
