@@ -16,7 +16,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "BasketCalculation.Web": {
+    "API.Web": {
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {
@@ -24,6 +24,11 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "applicationUrl": "http://localhost:5000"
+    },
+    "Development": {
+      "commandName": "Project",
+      "environmentVariables": {
+      }
     }
   }
 }

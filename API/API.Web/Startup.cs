@@ -25,7 +25,7 @@ namespace API.Web
             services.AddSwagger();
             services.AddAutoMapper(typeof(ExampleProfile).GetTypeInfo().Assembly); // TODO: Modify for your base profile
             services.AddApplicationHealthChecks();
-            services.RegisterApplicationLayers();
+            services.RegisterApplicationLayers(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

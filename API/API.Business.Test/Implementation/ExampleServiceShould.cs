@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using AutoMapper;
 using Moq;
 using Microsoft.Extensions.Logging;
 using API.Business.Implementation.Specific;

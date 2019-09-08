@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using API.Business.Implementation.Specific;
@@ -11,6 +12,7 @@ using API.Data.Implementation.Specific;
 using API.Data.Interfaces;
 using API.Data.Interfaces.Specific;
 using API.Domain.Entities;
+using System.Diagnostics;
 
 namespace API.Web.Extensions
 {
@@ -51,19 +53,22 @@ namespace API.Web.Extensions
             });
         }
 
-        public static void RegisterApplicationLayers(this IServiceCollection services)
+        public static void RegisterApplicationLayers(this IServiceCollection services, IConfiguration configuration)
         {
-            services.RegisterDbContext();
+            services.RegisterDbContext(configuration);
             services.RegisterRepositories();
             services.RegisterUnitOfWork();
             services.RegisterValidators();
             services.RegisterApplicationServices();
         }
 
-        private static void RegisterDbContext(this IServiceCollection services)
+        private static void RegisterDbContext(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddDbContext<APIDbContext>(
-              options => options.UseInMemoryDatabase("ExampleDb"));
+            services.AddDbContext<APIDbContext>(options =>
+            {
+                options.UseNpgsql(configuration.GetConnectionString("CatalogueDb"));
+                options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+            });
         }
 
         private static void RegisterRepositories(this IServiceCollection services)
