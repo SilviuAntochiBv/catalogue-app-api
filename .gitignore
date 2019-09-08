@@ -1,0 +1,23 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs
+/API/.vs/API/v15
+/API/API.Business/bin/Debug/netcoreapp2.2
+/API/API.Business/obj
+/API/API.Business.Test/bin/Debug/netcoreapp2.2
+/API/API.Business.Test/obj
+/API/API.Data/bin/Debug/netcoreapp2.2
+/API/API.Data/obj
+/API/API.Data.Test/bin/Debug/netcoreapp2.2
+/API/API.Data.Test/obj
+/API/API.Domain/bin/Debug/netcoreapp2.2
+/API/API.Domain/obj
+/API/API.Domain.Test/bin/Debug/netcoreapp2.2
+/API/API.Domain.Test/obj
+/API/API.Web/bin/Debug/netcoreapp2.2
+/API/API.Web/obj
+/API/API.Web.Test/bin/Debug/netcoreapp2.2
+/API/API.Web.Test/obj
+/API/TestResults/f2bde76c-503a-4fd6-ba8e-789ee3b21a52
