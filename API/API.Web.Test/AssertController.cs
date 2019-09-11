@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using API.Web.Responses;
+using Microsoft.AspNetCore.Mvc;
 using Xunit;
 
 namespace API.Web.Test
@@ -19,6 +20,16 @@ namespace API.Web.Test
             var value = (T)okObjectResult.Value;
 
             Assert.Equal(content, value);
+        }
+
+        public static void BadRequest(IActionResult actionResult)
+        {
+            Assert.IsType<BadRequestResult>(actionResult);
+        }
+
+        public static void InternalServerError(IActionResult actionResult)
+        {
+            Assert.IsType<InternalServerErrorResult>(actionResult);
         }
     }
 }

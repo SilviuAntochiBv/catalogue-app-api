@@ -1,8 +1,12 @@
-﻿using API.Domain.Logging;
+﻿using API.Domain.Common;
+using API.Domain.Dtos.Parameter;
+using API.Domain.Dtos.Result;
+using API.Domain.Interfaces;
+using API.Domain.Logging;
 
 namespace API.Business.Interfaces
 {
-    public interface IStudentService : ILoggable<IStudentService>
+    public interface IStudentService : IAddable<StudentInputDto, Response<StudentResultDto>>, ILoggable<IStudentService>
     {
     }
 }

@@ -1,4 +1,5 @@
 ﻿using API.Domain.Logging;
+using API.Web.Responses;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -14,6 +15,11 @@ namespace API.Web.Controllers
         {
             Service = service;
             Logger = logger;
+        }
+
+        protected InternalServerErrorResult InternalServerError()
+        {
+            return new InternalServerErrorResult();
         }
     }
 }
