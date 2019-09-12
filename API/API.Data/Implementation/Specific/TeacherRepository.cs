@@ -6,7 +6,7 @@ namespace API.Data.Implementation.Specific
 {
     public class TeacherRepository : Repository<Teacher>, ITeacherRepository
     {
-        public TeacherRepository(DbContext databaseContext) : base(databaseContext)
+        public TeacherRepository(APIDbContext databaseContext) : base(databaseContext)
         {
         }
     }

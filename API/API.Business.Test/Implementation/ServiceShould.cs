@@ -82,6 +82,8 @@ namespace API.Business.Test.Implementation
 
         protected Mock<IValidator<IBaseEntity>> ValidatorMock { get; }
 
+        protected Mock<ValidationResult> ValidationResultMock { get; }
+
         protected IMapper MapperInstance { get; }
 
         protected Mock<TRepo> RepositoryMock { get; }
@@ -91,6 +93,7 @@ namespace API.Business.Test.Implementation
             // startup
             UnitOfWorkMock = new Mock<IUnitOfWork>();
             ValidatorMock = new Mock<IValidator<IBaseEntity>>();
+            ValidationResultMock = new Mock<ValidationResult>();
             RepositoryMock = new Mock<TRepo>();
 
             UnitOfWorkMock

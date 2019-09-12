@@ -5,6 +5,7 @@ using API.Domain.Dtos.Result;
 using API.Web.Controllers;
 using Moq;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -50,7 +51,7 @@ namespace API.Web.Test
         {
             // arrange
             var studentResultDto = new StudentResultDto();
-            var serviceResult = new Response<StudentResultDto>(studentResultDto);
+            var serviceResult = Response<StudentResultDto>.Valid(studentResultDto);
 
             SetupServiceMock(serviceResult);
 
@@ -65,10 +66,7 @@ namespace API.Web.Test
         public async Task ReturnBadRequestWhenServiceReturnsInvalidOjbectOnCallAddNewService()
         {
             // arrange
-            var serviceResult = new Response<StudentResultDto>
-            {
-                IsValid = false
-            };
+            var serviceResult = Response<StudentResultDto>.Invalid(new List<string> { "validationError" });
 
             SetupServiceMock(serviceResult);
 

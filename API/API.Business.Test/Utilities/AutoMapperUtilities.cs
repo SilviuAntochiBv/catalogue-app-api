@@ -25,7 +25,7 @@ namespace API.Business.Test.Utilities
                 {
                     var config = new MapperConfiguration(cfg =>
                     {
-                        cfg.AddProfile<ExampleProfile>();
+                        cfg.AddProfile<StudentMapperProfile>();
                     });
 
                     Mapper = config.CreateMapper();

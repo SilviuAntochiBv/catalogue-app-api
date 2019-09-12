@@ -23,7 +23,7 @@ namespace API.Web
         {
             StartupServicesExtensions.AddMvc(services);
             services.AddSwagger();
-            services.AddAutoMapper(typeof(ExampleProfile).GetTypeInfo().Assembly); // TODO: Modify for your base profile
+            services.AddAutoMapper(typeof(StudentMapperProfile).GetTypeInfo().Assembly); // TODO: Modify for your base profile
             services.AddApplicationHealthChecks();
             services.RegisterApplicationLayers(Configuration);
         }

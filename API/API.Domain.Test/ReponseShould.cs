@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using API.Domain.Common;
 using Xunit;
 
@@ -11,57 +12,61 @@ namespace API.Domain.Test
             public string Uuid { get; set; }
         }
 
+        private readonly TestDto _defaultDto;       
+
         private Response<TestDto> _response;
 
         public ResponseShould()
         {
-            _response = new Response<TestDto>();
+            _defaultDto = new TestDto();
+
+            _response = Response<TestDto>.Valid(_defaultDto);
         }
 
         [Fact]
-        public void BeValidByDefault()
+        public void ReturnValidReponseWhenCallingValid()
         {
             Assert.True(_response.IsValid);
         }
 
         [Fact]
-        public void HaveAlreadyCreatedErrorList()
+        public void HaveEmptyErrorListWhenCallingValid()
         {
-            Assert.NotNull(_response.Errors);
+            Assert.Empty(_response.Errors);
         }
 
         [Fact]
-        public void BeValidByDefaultForDataCtor()
-        {
-            // arrange
-            _response = new Response<TestDto>(new TestDto());
-
-            // assert
-            Assert.True(_response.IsValid);
-        }
-
-        [Fact]
-        public void HaveAlreadyCreatedErrorListForDataCtor()
-        {
-            // arrange
-            _response = new Response<TestDto>(new TestDto());
-
-            // assert
-            Assert.NotNull(_response.Errors);
-        }
-
-        [Fact]
-        public void HaveDataInitialized()
+        public void SetDataWhenCallingValid()
         {
             // arrange
             var guid = Guid.NewGuid().ToString();
-            var testData = new TestDto { Uuid = guid };
+            _defaultDto.Uuid = guid;
 
             // act
-            _response = new Response<TestDto>(testData);
+            _response = Response<TestDto>.Valid(_defaultDto);
 
             // assert
             Assert.Equal(guid, _response.Data.Uuid);
+        }
+
+        [Fact]
+        public void CreateInvalidResponseWhenCallingInvalid()
+        {
+            // act
+            _response = Response<TestDto>.Invalid(new List<string> { "error" });
+
+            // assert
+            Assert.False(_response.IsValid);
+        }
+
+        [Fact]
+        public void HaveItemsInErrorCollectionWhenCallingInvalid()
+        {
+            // act
+            _response = Response<TestDto>.Invalid(new List<string> { "error" });
+
+            // assert
+            Assert.NotEmpty(_response.Errors);
         }
     }
 }

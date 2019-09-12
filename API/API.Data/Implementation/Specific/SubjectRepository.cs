@@ -6,7 +6,7 @@ namespace API.Data.Implementation.Specific
 {
     public class SubjectRepository : Repository<Subject>, ISubjectRepository
     {
-        public SubjectRepository(DbContext databaseContext) : base(databaseContext)
+        public SubjectRepository(APIDbContext databaseContext) : base(databaseContext)
         {
         }
     }

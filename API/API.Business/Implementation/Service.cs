@@ -8,6 +8,7 @@ using FluentValidation;
 using FluentValidation.Results;
 using API.Data.Interfaces;
 using API.Domain.Entities.Interfaces;
+using API.Domain.Common;
 
 namespace API.Business.Implementation
 {
@@ -107,6 +108,16 @@ namespace API.Business.Implementation
             }
 
             return validationResult;
+        }
+
+        protected Response<TData> CreateValidResponse<TData>(TData data)
+        {
+            return Response<TData>.Valid(data);
+        }
+
+        protected Response<TData> CreateInvalidResponse<TData>(ValidationResult invalidValidationResult)
+        {
+            return Response<TData>.Invalid(invalidValidationResult.Errors.Select(failure => $"{failure.ErrorCode}: {failure.ErrorMessage}"));
         }
     }
 }

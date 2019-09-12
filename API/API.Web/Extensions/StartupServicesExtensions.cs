@@ -65,8 +65,8 @@ namespace API.Web.Extensions
         {
             services.AddDbContext<APIDbContext>(options =>
             {
-                options.UseInMemoryDatabase("CatalogueDb");
-                //options.UseNpgsql(configuration.GetConnectionString("CatalogueDb"));
+                //options.UseInMemoryDatabase("CatalogueDb");
+                options.UseNpgsql(configuration.GetConnectionString("CatalogueDb"));
                 options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
             });
         }

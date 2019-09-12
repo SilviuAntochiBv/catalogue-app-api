@@ -2,7 +2,7 @@
 using API.Data.Interfaces.Specific;
 using API.Domain.Entities;
 
-namespace API.Data.Test.Implementation
+namespace API.Data.Test.Implementation.Specific
 {
     public class SubjectRepositoryShould : RepositoryShould<ISubjectRepository, Subject, int>
     {

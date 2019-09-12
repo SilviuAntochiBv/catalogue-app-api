@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using System.Linq;
 using API.Business.Interfaces;
 using API.Data.Interfaces;
 using API.Data.Interfaces.Specific;
@@ -17,18 +18,29 @@ namespace API.Business.Implementation.Specific
         public ILogger<IStudentService> Logger { get; }
 
         public StudentService(
-            IUnitOfWork unitOfWork, 
-            IValidator<Student> validator, 
-            IMapper mapper, 
+            IUnitOfWork unitOfWork,
+            IValidator<Student> validator,
+            IMapper mapper,
             ILogger<IStudentService> logger)
             : base(unitOfWork, validator, mapper)
         {
             Logger = logger;
         }
 
-        public Task<Response<StudentResultDto>> Add(StudentInputDto entity)
+        public async Task<Response<StudentResultDto>> Add(StudentInputDto input)
         {
-            throw new System.NotImplementedException();
+            var studentEntity = Mapper.Map<StudentInputDto, Student>(input);
+
+            var validationResult = await AddToRepository(studentEntity);
+
+            if (!validationResult.IsValid)
+            {
+                return CreateInvalidResponse<StudentResultDto>(validationResult);
+            }
+
+            var studentResultDto = Mapper.Map<Student, StudentResultDto>(studentEntity);
+
+            return CreateValidResponse(studentResultDto);
         }
     }
 }
