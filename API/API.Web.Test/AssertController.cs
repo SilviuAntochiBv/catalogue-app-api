@@ -27,6 +27,11 @@ namespace API.Web.Test
             Assert.IsType<BadRequestResult>(actionResult);
         }
 
+        public static void NotFound(IActionResult actionResult)
+        {
+            Assert.IsType<NotFoundResult>(actionResult);
+        }
+
         public static void InternalServerError(IActionResult actionResult)
         {
             Assert.IsType<InternalServerErrorResult>(actionResult);

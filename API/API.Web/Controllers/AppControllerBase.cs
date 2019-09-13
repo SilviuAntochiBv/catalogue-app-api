@@ -11,7 +11,7 @@ namespace API.Web.Controllers
 
         public ILogger<TController> Logger { get; }
 
-        public AppControllerBase(TService service, ILogger<TController> logger)
+        protected AppControllerBase(TService service, ILogger<TController> logger)
         {
             Service = service;
             Logger = logger;

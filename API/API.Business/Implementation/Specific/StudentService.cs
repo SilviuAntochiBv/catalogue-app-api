@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Linq;
 using API.Business.Interfaces;
 using API.Data.Interfaces;
@@ -41,6 +42,20 @@ namespace API.Business.Implementation.Specific
             var studentResultDto = Mapper.Map<Student, StudentResultDto>(studentEntity);
 
             return CreateValidResponse(studentResultDto);
+        }
+
+        public async Task<IEnumerable<StudentResultDto>> GetAll()
+        {
+            var entities = await GetAllFromRepository();
+
+            return Mapper.Map<IEnumerable<Student>, IEnumerable<StudentResultDto>>(entities);
+        }
+
+        public async Task<StudentResultDto> GetById(object id)
+        {
+            var studentEntity = await GetByIdFromRepository(id);
+
+            return studentEntity != null ? Mapper.Map<Student, StudentResultDto>(studentEntity) : null;
         }
     }
 }

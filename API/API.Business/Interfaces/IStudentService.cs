@@ -6,7 +6,10 @@ using API.Domain.Logging;
 
 namespace API.Business.Interfaces
 {
-    public interface IStudentService : IAddable<StudentInputDto, Response<StudentResultDto>>, ILoggable<IStudentService>
+    public interface IStudentService : 
+        IAddable<StudentInputDto, Response<StudentResultDto>>, 
+        IInterrogable<StudentResultDto>,
+        ILoggable<IStudentService>
     {
     }
 }
