@@ -55,10 +55,10 @@ namespace API.Web.Extensions
         public static void RegisterApplicationLayers(this IServiceCollection services, IConfiguration configuration)
         {
             services.RegisterDbContext(configuration);
-            services.RegisterRepositories();
             services.RegisterUnitOfWork();
-            services.RegisterValidators();
+            services.RegisterRepositories();
             services.RegisterApplicationServices();
+            services.RegisterValidators();
         }
 
         private static void RegisterDbContext(this IServiceCollection services, IConfiguration configuration)
@@ -66,9 +66,14 @@ namespace API.Web.Extensions
             services.AddDbContext<APIDbContext>(options =>
             {
                 //options.UseInMemoryDatabase("CatalogueDb");
-                options.UseNpgsql(configuration.GetConnectionString("CatalogueDb"));
+                options.UseNpgsql(configuration.GetConnectionString("CatalogueDb"), optionsBuilder => optionsBuilder.MigrationsAssembly(@"API.Data"));
                 options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
             });
+        }
+
+        private static void RegisterUnitOfWork(this IServiceCollection services)
+        {
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
         }
 
         private static void RegisterRepositories(this IServiceCollection services)
@@ -78,11 +83,6 @@ namespace API.Web.Extensions
             services.AddScoped<IStudentRepository, StudentRepository>();
             services.AddScoped<ISubjectRepository, SubjectRepository>();
             services.AddScoped<ITeacherRepository, TeacherRepository>();
-        }
-
-        private static void RegisterUnitOfWork(this IServiceCollection services)
-        {
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
         }
 
         private static void RegisterApplicationServices(this IServiceCollection services)

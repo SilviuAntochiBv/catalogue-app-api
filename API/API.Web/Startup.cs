@@ -35,6 +35,8 @@ namespace API.Web
             app.ConfigureMvc();
             app.ConfigureSwagger();
             app.ConfigureHealthChecks();
+
+            app.InitializeDatabase();
         }
     }
 }

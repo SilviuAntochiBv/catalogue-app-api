@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using API.Data;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace API.Web.Extensions
 {
@@ -45,5 +48,13 @@ namespace API.Web.Extensions
                 context.Response.StatusCode = 500;
                 await context.Response.WriteAsync("An unexpected fault happened. Try again later.");
             };
+
+        public static void InitializeDatabase(this IApplicationBuilder app)
+        {
+            using (var scope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
+            {
+                scope.ServiceProvider.GetRequiredService<APIDbContext>().Database.Migrate();
+            }
+        }
     }
 }
