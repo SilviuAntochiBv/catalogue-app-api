@@ -1,9 +1,7 @@
 ﻿namespace API.Domain.Dtos.Parameter
 {
-    public class SubjectInputDto
+    public class SubjectInputDto : NamedInputDto
     {
-        public string Name { get; set; }
-
         public string Description { get; set; }
     }
 }

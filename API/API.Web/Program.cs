@@ -1,7 +1,6 @@
 ﻿using System;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Logging;
 using NLog.Web;
 
@@ -17,7 +16,7 @@ namespace API.Web
 
             try
             {
-                logger.Info("Starting template");
+                logger.Info("Starting catalogue api server");
 
                 CreateWebHostBuilder(args)
                     .Build()
@@ -25,7 +24,7 @@ namespace API.Web
             }
             catch (Exception ex)
             {
-                logger.Fatal(ex, "Host for template terminated unexpectedly");
+                logger.Fatal(ex, "Host for catalogue api server terminated unexpectedly");
             }
             finally
             {

@@ -46,7 +46,7 @@ namespace API.Business.Test.Mappers
         [Theory]
         [InlineData(1, "result_FirstName", "result_LastName", 20)]
         [InlineData(2, "result_AnotherFirstName", "result_AnotherLastName", 35)]
-        public void MapStudentEntityToStudentResult(
+        public void MapStudentEntityToStudentResultDto(
             int id,
             string firstName,
             string lastName,

@@ -2,7 +2,8 @@
 
 namespace API.Business.Interfaces
 {
-    public interface ITeacherService : ILoggable<ITeacherService>
+    public interface ITeacherService : 
+        ILoggable<ITeacherService>
     {
     }
 }

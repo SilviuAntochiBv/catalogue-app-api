@@ -7,7 +7,6 @@ using Moq;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using API.Business.Implementation;
 using Xunit;
 
 namespace API.Web.Test
