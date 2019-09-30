@@ -1,6 +1,8 @@
-﻿namespace API.Domain.Dtos.Result
+﻿using API.Domain.Dtos.Result.Base;
+
+namespace API.Domain.Dtos.Result
 {
-    public class TeacherResultDto : PersonDto<int>
+    public class TeacherResultDto : PersonResultDto<int>
     {
     }
 }

@@ -1,6 +1,8 @@
-﻿namespace API.Domain.Dtos.Result
+﻿using API.Domain.Dtos.Result.Base;
+
+namespace API.Domain.Dtos.Result
 {
-    public class SubjectResultDto : NamedDto<int>
+    public class SubjectResultDto : NamedResultDto<int>
     {
     }
 }
