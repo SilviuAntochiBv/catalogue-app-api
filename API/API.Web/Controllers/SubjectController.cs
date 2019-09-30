@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using API.Business.Interfaces;
+using API.Domain.Dtos.Parameter;
 using API.Domain.Dtos.Result;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -15,48 +17,75 @@ namespace API.Web.Controllers
         {
         }
 
+        [HttpGet]
+        [ProducesResponseType(typeof(IEnumerable<SubjectResultDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetAllSubjects()
+        {
+            try
+            {
+                var retrievedSubjects = await Service.GetAll();
+
+                return Ok(retrievedSubjects);
+            }
+            catch (Exception)
+            {
+                return InternalServerError();
+            }
+        }
+
         [HttpGet("{subjectId}")]
         [ProducesResponseType(typeof(SubjectResultDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetSubject(int subjectId)
         {
-            var result = new SubjectResultDto
+            try
             {
-                Id = 1,
-                Name = "Informatica"
-            };
+                var retrievedSubject = await Service.GetById(subjectId);
 
-            return Ok(result);
-        }
+                if (retrievedSubject == null)
+                    return NotFound();
 
-        [HttpGet]
-        [ProducesResponseType(typeof(IEnumerable<SubjectResultDto>), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetAllSubjects()
-        {
-            var result = new List<SubjectResultDto>
+                return Ok(retrievedSubject);
+            }
+            catch (Exception)
             {
-                new SubjectResultDto
-                {
-                    Id = 1,
-                    Name = "Informatica"
-                },
-                new SubjectResultDto
-                {
-                    Id = 2,
-                    Name = "Limba rusa"
-                }
-            };
-
-            return Ok(result);
+                return InternalServerError();
+            }
         }
 
         [HttpPatch("{subjectId}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> EditSubject(int subjectId)
+        public async Task<IActionResult> EditSubject(int subjectId, [FromBody]SubjectInputDto subjectInputDto)
         {
-            return NoContent();
+            if (!ModelState.IsValid || IsEditBodyInvalid(subjectInputDto))
+                return BadRequest();
+
+            try
+            {
+                var editSubjectResponse = await Service.Update(subjectId, subjectInputDto);
+
+                if (editSubjectResponse == null)
+                    return NotFound();
+
+                if (!editSubjectResponse.IsValid)
+                    return BadRequest();
+
+                return NoContent();
+            }
+            catch (Exception)
+            {
+                return InternalServerError();
+            }
+        }
+        
+        private bool IsEditBodyInvalid(SubjectInputDto subjectInputDto)
+        {
+            if (subjectInputDto == null)
+                return true;
+
+            return string.IsNullOrWhiteSpace(subjectInputDto.Name) && string.IsNullOrWhiteSpace(subjectInputDto.Description);
         }
     }
 }

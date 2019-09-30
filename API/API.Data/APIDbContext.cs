@@ -90,6 +90,11 @@ namespace API.Data
                     .HasColumnName("name")
                     .HasMaxLength(100);
 
+                entity.Property(e => e.Description)
+                    .IsRequired(false)
+                    .HasColumnName("description")
+                    .HasMaxLength(1024);
+
                 entity.HasIndex(e => e.Name)
                     .HasName("unique_subject_name")
                     .IsUnique();

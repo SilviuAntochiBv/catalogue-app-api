@@ -1,6 +1,11 @@
-﻿using API.Business.Interfaces;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using API.Business.Interfaces;
 using API.Data.Interfaces;
 using API.Data.Interfaces.Specific;
+using API.Domain.Common;
+using API.Domain.Dtos.Parameter;
+using API.Domain.Dtos.Result;
 using API.Domain.Entities;
 using AutoMapper;
 using FluentValidation;
@@ -17,5 +22,19 @@ namespace API.Business.Implementation.Specific
             Logger = logger;
         }
 
+        public Task<SubjectResultDto> GetById(object id)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task<IEnumerable<SubjectResultDto>> GetAll()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task<Response<SubjectResultDto>> Update(int subjectId, SubjectInputDto entity)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

@@ -1,8 +1,16 @@
-﻿using API.Domain.Logging;
+﻿using System.Threading.Tasks;
+using API.Domain.Common;
+using API.Domain.Dtos.Parameter;
+using API.Domain.Dtos.Result;
+using API.Domain.Interfaces;
+using API.Domain.Logging;
 
 namespace API.Business.Interfaces
 {
-    public interface ISubjectService : ILoggable<ISubjectService>
+    public interface ISubjectService : 
+        IInterrogable<SubjectResultDto>, 
+        ILoggable<ISubjectService>
     {
+        Task<Response<SubjectResultDto>> Update(int subjectId, SubjectInputDto subjectInputDto);
     }
 }

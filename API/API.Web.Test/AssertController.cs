@@ -1,4 +1,5 @@
-﻿using API.Web.Responses;
+﻿using System;
+using API.Web.Responses;
 using Microsoft.AspNetCore.Mvc;
 using Xunit;
 
@@ -35,6 +36,11 @@ namespace API.Web.Test
         public static void InternalServerError(IActionResult actionResult)
         {
             Assert.IsType<InternalServerErrorResult>(actionResult);
+        }
+
+        internal static void NoContent(IActionResult actionResult)
+        {
+            Assert.IsType<NoContentResult>(actionResult);
         }
     }
 }

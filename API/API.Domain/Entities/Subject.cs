@@ -6,6 +6,8 @@ namespace API.Domain.Entities
     {
         public string Name { get; set; }
 
+        public string Description { get; set; }
+
         public virtual ICollection<TeacherSubjectAssociation> Teachers { get; set; }
 
         public virtual ICollection<Course> AssociatedCourses { get; set; }
