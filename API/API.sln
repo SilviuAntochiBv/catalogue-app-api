@@ -1,27 +1,32 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.779
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29613.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "source", "source", "{1CEF9D91-C1BF-4F44-A8DA-38E19C3979D6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "API.Domain", "API.Domain\API.Domain.csproj", "{BB0C5D1B-643A-4D22-8AEB-5D55139ADF55}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "API.Domain", "API.Domain\API.Domain.csproj", "{BB0C5D1B-643A-4D22-8AEB-5D55139ADF55}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "API.Data", "API.Data\API.Data.csproj", "{D48478F7-1A94-40E6-963D-7D0D7AC32BAF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "API.Data", "API.Data\API.Data.csproj", "{D48478F7-1A94-40E6-963D-7D0D7AC32BAF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "API.Business", "API.Business\API.Business.csproj", "{E42F11A2-B8D4-41F9-8560-DC7421751529}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "API.Business", "API.Business\API.Business.csproj", "{E42F11A2-B8D4-41F9-8560-DC7421751529}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "API.Web", "API.Web\API.Web.csproj", "{0327D951-E7F3-454C-BA36-513604D15789}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "API.Web", "API.Web\API.Web.csproj", "{0327D951-E7F3-454C-BA36-513604D15789}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{D0B54586-7E88-4099-A3AA-46161D491330}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "API.Data.Test", "API.Data.Test\API.Data.Test.csproj", "{90D5E28B-191C-440A-94C1-E2668AA02BC7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "API.Data.Test", "API.Data.Test\API.Data.Test.csproj", "{90D5E28B-191C-440A-94C1-E2668AA02BC7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "API.Domain.Test", "API.Domain.Test\API.Domain.Test.csproj", "{61471425-0EE8-461D-8EEB-DAE4A4F2CAF2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "API.Domain.Test", "API.Domain.Test\API.Domain.Test.csproj", "{61471425-0EE8-461D-8EEB-DAE4A4F2CAF2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "API.Business.Test", "API.Business.Test\API.Business.Test.csproj", "{011F7F74-2A01-4680-A594-E5AA56461D43}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "API.Business.Test", "API.Business.Test\API.Business.Test.csproj", "{011F7F74-2A01-4680-A594-E5AA56461D43}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "API.Web.Test", "API.Web.Test\API.Web.Test.csproj", "{BED98394-E4E6-4697-87B8-FFFE7C4BDF74}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "API.Web.Test", "API.Web.Test\API.Web.Test.csproj", "{BED98394-E4E6-4697-87B8-FFFE7C4BDF74}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{90696820-8FA5-4E74-A5EE-3DC264807893}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

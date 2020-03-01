@@ -96,15 +96,53 @@ namespace API.Business.Test.Implementation
             ValidationResultMock = new Mock<ValidationResult>();
             RepositoryMock = new Mock<TRepo>();
 
-            UnitOfWorkMock
-             .Setup(uow => uow.GetRepository<TRepo>())
-             .Returns(RepositoryMock.Object);
+            SetupDefaultMocks();
 
-            MapperInstance = AutoMapperUtilities.Init();
+            MapperInstance = AutoMapperUtilities.MapperInstance;
 
             LoggerMock = new Mock<ILogger<TService>>();
 
             _internalService = new InternalService<TEntity, TRepo>(UnitOfWorkMock.Object, ValidatorMock.Object, MapperInstance);
+        }
+
+        private void SetupDefaultMocks()
+        {
+            SetupUnitOfWorkMock(RepositoryMock);
+
+            SetupValidatorMock();
+        }
+
+        protected void SetupUnitOfWorkMock<T>(Mock<T> repositoryMock) where T : class, IRepository<TEntity>
+        {
+            if (repositoryMock == null)
+            {
+                return;
+            }
+
+            UnitOfWorkMock
+             .Setup(uow => uow.GetRepository<T>())
+             .Returns(repositoryMock.Object);
+        }
+
+        private void SetupValidatorMock()
+        {
+            ValidatorMock
+                .Setup(v => v.Validate(It.IsAny<IBaseEntity>()))
+                .Returns(ValidationResultMock.Object);
+
+            SetupValidationResultMock(true);
+        }
+
+        protected void SetupInvalidValidationResultMock()
+        {
+            SetupValidationResultMock(false);
+        }
+
+        private void SetupValidationResultMock(bool isValid)
+        {
+            ValidationResultMock
+                .SetupGet(validationResult => validationResult.IsValid)
+                .Returns(isValid);
         }
 
         [Fact]
@@ -137,10 +175,6 @@ namespace API.Business.Test.Implementation
             var mockedEntity = new Mock<TEntity>();
             var entity = mockedEntity.Object;
 
-            ValidatorMock
-                .Setup(v => v.Validate(entity))
-                .Returns(new ValidationResult());
-
             // act
             await _internalService.Add(entity);
 
@@ -154,12 +188,6 @@ namespace API.Business.Test.Implementation
             // arrange
             var mockedEntity = new Mock<TEntity>();
             var entity = mockedEntity.Object;
-            var validationResultMock = new Mock<ValidationResult>();
-            validationResultMock.Setup(vrm => vrm.IsValid).Returns(true);
-
-            ValidatorMock
-                .Setup(v => v.Validate(entity))
-                .Returns(validationResultMock.Object);
 
             // act
             await _internalService.Add(entity);
@@ -174,12 +202,8 @@ namespace API.Business.Test.Implementation
             // arrange
             var mockedEntity = new Mock<TEntity>();
             var entity = mockedEntity.Object;
-            var validationResultMock = new Mock<ValidationResult>();
-            validationResultMock.Setup(vrm => vrm.IsValid).Returns(false);
 
-            ValidatorMock
-                .Setup(v => v.Validate(entity))
-                .Returns(validationResultMock.Object);
+            SetupValidationResultMock(false);
 
             // act
             await _internalService.Add(entity);
@@ -194,11 +218,7 @@ namespace API.Business.Test.Implementation
             // arrange
             var mockedEntity = new Mock<TEntity>();
             var entity = mockedEntity.Object;
-
-            ValidatorMock
-                .Setup(v => v.Validate(entity))
-                .Returns(new ValidationResult());
-
+            
             // act
             await _internalService.Update(entity);
 
@@ -212,12 +232,6 @@ namespace API.Business.Test.Implementation
             // arrange
             var mockedEntity = new Mock<TEntity>();
             var entity = mockedEntity.Object;
-            var validationResultMock = new Mock<ValidationResult>();
-            validationResultMock.Setup(vrm => vrm.IsValid).Returns(true);
-
-            ValidatorMock
-                .Setup(v => v.Validate(entity))
-                .Returns(validationResultMock.Object);
 
             // act
             await _internalService.Update(entity);
@@ -232,12 +246,8 @@ namespace API.Business.Test.Implementation
             // arrange
             var mockedEntity = new Mock<TEntity>();
             var entity = mockedEntity.Object;
-            var validationResultMock = new Mock<ValidationResult>();
-            validationResultMock.Setup(vrm => vrm.IsValid).Returns(false);
 
-            ValidatorMock
-                .Setup(v => v.Validate(entity))
-                .Returns(validationResultMock.Object);
+            SetupValidationResultMock(false);
 
             // act
             await _internalService.Update(entity);
@@ -279,12 +289,6 @@ namespace API.Business.Test.Implementation
             // arrange
             var mockedEntity = new Mock<TEntity>();
             var entity = mockedEntity.Object;
-            var validationResultMock = new Mock<ValidationResult>();
-            validationResultMock.Setup(vrm => vrm.IsValid).Returns(true);
-
-            ValidatorMock
-                .Setup(v => v.Validate(entity))
-                .Returns(validationResultMock.Object);
 
             // act
             await _internalService.Add(entity);
@@ -299,12 +303,6 @@ namespace API.Business.Test.Implementation
             // arrange
             var mockedEntity = new Mock<TEntity>();
             var entity = mockedEntity.Object;
-            var validationResultMock = new Mock<ValidationResult>();
-            validationResultMock.Setup(vrm => vrm.IsValid).Returns(true);
-
-            ValidatorMock
-                .Setup(v => v.Validate(entity))
-                .Returns(validationResultMock.Object);
 
             // act
             await _internalService.Update(entity);

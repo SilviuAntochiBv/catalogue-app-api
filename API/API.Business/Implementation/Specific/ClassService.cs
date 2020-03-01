@@ -12,7 +12,12 @@ namespace API.Business.Implementation.Specific
     {
         public ILogger<IClassService> Logger { get; }
 
-        public ClassService(IUnitOfWork unitOfWork, IValidator<Class> validator, IMapper mapper, ILogger<IClassService> logger) : base(unitOfWork, validator, mapper)
+        public ClassService(
+            IUnitOfWork unitOfWork, 
+            IValidator<Class> validator, 
+            IMapper mapper, 
+            ILogger<IClassService> logger) 
+            : base(unitOfWork, validator, mapper)
         {
             Logger = logger;
         }

@@ -5,7 +5,7 @@ using AutoMapper;
 
 namespace API.Business.Mappers
 {
-    public class StudentMapperProfile : Profile
+    public sealed class StudentMapperProfile : Profile
     {
         public StudentMapperProfile()
         {

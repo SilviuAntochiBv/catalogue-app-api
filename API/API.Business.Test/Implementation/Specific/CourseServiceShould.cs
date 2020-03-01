@@ -11,7 +11,11 @@ namespace API.Business.Test.Implementation
 
         public CourseServiceShould()
         {
-            _courseService = new CourseService(UnitOfWorkMock.Object, ValidatorMock.Object, MapperInstance, LoggerMock.Object);
+            _courseService = new CourseService(
+                UnitOfWorkMock.Object, 
+                ValidatorMock.Object, 
+                MapperInstance, 
+                LoggerMock.Object);
         }
     }
 }

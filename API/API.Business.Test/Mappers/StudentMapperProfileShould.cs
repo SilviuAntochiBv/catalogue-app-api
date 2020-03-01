@@ -13,7 +13,7 @@ namespace API.Business.Test.Mappers
 
         public StudentMapperProfileShould()
         {
-            _mapper = AutoMapperUtilities.Init();
+            _mapper = AutoMapperUtilities.MapperInstance;
         }
 
         [Theory]

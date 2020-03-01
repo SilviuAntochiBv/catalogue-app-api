@@ -37,20 +37,6 @@ namespace API.Web.Test
         #endregion
 
         #region AddNewStudent
-        
-        [Fact]
-        public async Task ReturnBadRequestForInvalidModelStateWhenAddNewStudentIsCalled()
-        {
-            // arrange
-            _studentController.ModelState.AddModelError("error", Guid.NewGuid().ToString());
-
-            // act
-            var result = await _studentController.AddNewStudent(_defaultStudentInput);
-
-            // assert
-            AssertController.BadRequest(result);
-        }
-
         [Fact]
         public async Task CallStudentServiceWhenCallingAddNewStudent()
         {

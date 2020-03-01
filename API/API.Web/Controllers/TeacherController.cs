@@ -6,10 +6,14 @@ using Microsoft.Extensions.Logging;
 
 namespace API.Web.Controllers
 {
+    [ApiController]
     [Route("teachers")]
     public class TeacherController : AppControllerBase<ITeacherService, TeacherController>
     {
-        public TeacherController(ITeacherService service, ILogger<TeacherController> logger) : base(service, logger)
+        public TeacherController(
+            ITeacherService service, 
+            ILogger<TeacherController> logger)
+            : base(service, logger)
         {
         }
 

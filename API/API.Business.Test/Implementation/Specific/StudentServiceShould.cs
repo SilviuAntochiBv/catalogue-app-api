@@ -12,63 +12,26 @@ namespace API.Business.Test.Implementation
 {
     public class StudentServiceShould : ServiceShould<IStudentService, Student, IStudentRepository>
     {
-        private readonly IStudentService _service;
+        private IStudentService Service { get; }
 
-        private readonly StudentInputDto _defaultInputDto;
+        private StudentInputDto DefaultInputDto { get; }
 
-        private readonly int _defaultStudentId;
+        private int DefaultStudentId { get; }
 
         public StudentServiceShould()
         {
-            _defaultInputDto = new StudentInputDto();
-            _defaultStudentId = 1;
+            DefaultInputDto = new StudentInputDto();
+            DefaultStudentId = 1;
 
-            SetupDefaultMocks();
-
-            _service = new StudentService(UnitOfWorkMock.Object, ValidatorMock.Object, MapperInstance, LoggerMock.Object);
+            Service = new StudentService(UnitOfWorkMock.Object, ValidatorMock.Object, MapperInstance, LoggerMock.Object);
         }
-
-        #region Mocks
-
-        private void SetupDefaultMocks()
-        {
-            SetupUnitOfWorkMock();
-
-            SetupValidatorMock();
-        }
-
-        private void SetupUnitOfWorkMock()
-        {
-            UnitOfWorkMock
-                .Setup(uow => uow.GetRepository<IStudentRepository>())
-                .Returns(RepositoryMock.Object);
-        }
-
-        private void SetupValidatorMock()
-        {
-            ValidatorMock
-                .Setup(validator => validator.Validate(It.IsAny<Student>()))
-                .Returns(ValidationResultMock.Object);
-
-            SetupValidationResultMock();
-        }
-
-        private void SetupValidationResultMock(bool isValid = true)
-        {
-            ValidationResultMock
-                .SetupGet(result => result.IsValid)
-                .Returns(isValid);
-        }
-
-        #endregion
 
         #region Add
-
         [Fact]
         public async Task CallRepositoryWhenCallingAdd()
         {
             // act
-            await _service.Add(_defaultInputDto);
+            await Service.Add(DefaultInputDto);
 
             // assert
             RepositoryMock
@@ -79,7 +42,7 @@ namespace API.Business.Test.Implementation
         public async Task ReturnValidResponseWhenValidationPasses()
         {
             // act 
-            var result = await _service.Add(_defaultInputDto);
+            var result = await Service.Add(DefaultInputDto);
 
             // assert
             Assert.True(result.IsValid);
@@ -89,10 +52,10 @@ namespace API.Business.Test.Implementation
         public async Task ReturnInvalidResponseWhenValidationFails()
         {
             // arrange
-            SetupValidationResultMock(false);
+            SetupInvalidValidationResultMock();
 
             // act 
-            var result = await _service.Add(_defaultInputDto);
+            var result = await Service.Add(DefaultInputDto);
 
             // assert
             Assert.False(result.IsValid);
@@ -106,7 +69,7 @@ namespace API.Business.Test.Implementation
         public async Task CallStudentRepositoryWhenCallingGetAll()
         {
             // act
-            await _service.GetAll();
+            await Service.GetAll();
 
             // assert
             RepositoryMock
@@ -122,7 +85,7 @@ namespace API.Business.Test.Implementation
                 .Returns(Task.FromResult(StudentEntities));
 
             // act
-            var result = await _service.GetAll();
+            var result = await Service.GetAll();
 
             // assert
             Assert.NotEmpty(result);
@@ -142,11 +105,11 @@ namespace API.Business.Test.Implementation
         public async Task CallStudentRepositoryWhenCallingGetById()
         {
             // act
-            await _service.GetById(_defaultStudentId);
+            await Service.GetById(DefaultStudentId);
 
             // assert
             RepositoryMock
-                .Verify(repo => repo.GetById(It.Is<int>(matcher => matcher == _defaultStudentId)), Times.Once);
+                .Verify(repo => repo.GetById(It.Is<int>(matcher => matcher == DefaultStudentId)), Times.Once);
         }
 
         [Fact]
@@ -154,11 +117,11 @@ namespace API.Business.Test.Implementation
         {
             // arrange
             RepositoryMock
-                .Setup(repo => repo.GetById(_defaultStudentId))
+                .Setup(repo => repo.GetById(DefaultStudentId))
                 .Returns(Task.FromResult(new Student()));
 
             // act
-            var result = await _service.GetById(_defaultStudentId);
+            var result = await Service.GetById(DefaultStudentId);
 
             // assert
             Assert.NotNull(result);
@@ -169,11 +132,11 @@ namespace API.Business.Test.Implementation
         {
             // arrange
             RepositoryMock
-                .Setup(repo => repo.GetById(_defaultStudentId))
+                .Setup(repo => repo.GetById(DefaultStudentId))
                 .Returns(Task.FromResult<Student>(null));
 
             // act
-            var result = await _service.GetById(_defaultStudentId);
+            var result = await Service.GetById(DefaultStudentId);
 
             // assert
             Assert.Null(result);

@@ -1,5 +1,4 @@
-﻿using System;
-using API.Web.Responses;
+﻿using API.Web.Responses;
 using Microsoft.AspNetCore.Mvc;
 using Xunit;
 

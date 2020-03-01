@@ -8,6 +8,7 @@ using API.Domain.Logging;
 namespace API.Business.Interfaces
 {
     public interface ISubjectService : 
+        IAddable<SubjectInputDto, Response<SubjectResultDto>>,
         IInterrogable<SubjectResultDto>, 
         ILoggable<ISubjectService>
     {

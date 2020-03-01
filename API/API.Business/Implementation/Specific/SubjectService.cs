@@ -10,6 +10,7 @@ using API.Domain.Entities;
 using AutoMapper;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
+using static API.Business.Implementation.ReponseCreationMethods;
 
 namespace API.Business.Implementation.Specific
 {
@@ -17,24 +18,52 @@ namespace API.Business.Implementation.Specific
     {
         public ILogger<ISubjectService> Logger { get; }
 
-        public SubjectService(IUnitOfWork unitOfWork, IValidator<Subject> validator, IMapper mapper, ILogger<ISubjectService> logger) : base(unitOfWork, validator, mapper)
+        public SubjectService(
+            IUnitOfWork unitOfWork, 
+            IValidator<Subject> validator, 
+            IMapper mapper, 
+            ILogger<ISubjectService> logger)
+            : base(unitOfWork, validator, mapper)
         {
             Logger = logger;
         }
 
-        public Task<SubjectResultDto> GetById(object id)
+        public async Task<Response<SubjectResultDto>> Add(SubjectInputDto subjectInput)
         {
-            throw new System.NotImplementedException();
+            var subjectEntity = Mapper.Map<SubjectInputDto, Subject>(subjectInput);
+
+            var validationResult = await AddToRepository(subjectEntity);
+
+            if (!validationResult.IsValid)
+                return CreateInvalidResponse<SubjectResultDto>(validationResult);
+
+            var result = Mapper.Map<Subject, SubjectResultDto>(subjectEntity);
+
+            return CreateValidResponse(result);
         }
 
-        public Task<IEnumerable<SubjectResultDto>> GetAll()
+        public async Task<SubjectResultDto> GetById(object id)
         {
-            throw new System.NotImplementedException();
+            var entity = await GetByIdFromRepository(id);
+
+            return entity != null ? Mapper.Map<Subject, SubjectResultDto>(entity) : null;
         }
 
-        public Task<Response<SubjectResultDto>> Update(int subjectId, SubjectInputDto entity)
+        public async Task<IEnumerable<SubjectResultDto>> GetAll()
         {
-            throw new System.NotImplementedException();
+            var entities = await GetAllFromRepository();
+
+            return Mapper.Map<IEnumerable<Subject>, IEnumerable<SubjectResultDto>>(entities);
+        }
+
+        public async Task<Response<SubjectResultDto>> Update(int subjectId, SubjectInputDto entity)
+        {
+            var subject = await GetByIdFromRepository(subjectId);
+
+            if (subject == null)
+                return null;
+
+            return null;
         }
     }
 }

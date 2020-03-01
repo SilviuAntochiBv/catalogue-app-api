@@ -19,7 +19,9 @@ namespace API.Web.Test
 
         private SubjectInputDto DefaultSubjectInputDto { get; }
 
-        private Response<SubjectResultDto> DefaultUpdateResponse { get; }
+        private SubjectResultDto DefaultResponseContent { get; }
+
+        private Response<SubjectResultDto> DefaultServiceResponse { get; }
 
         public SubjectControllerShould()
         {
@@ -28,21 +30,82 @@ namespace API.Web.Test
             {
                 Name = Guid.Empty.ToString()
             };
-            DefaultUpdateResponse = Response<SubjectResultDto>.Valid(new SubjectResultDto());
 
-            SetupServiceMockResponse(DefaultUpdateResponse);
+            DefaultResponseContent = new SubjectResultDto();
+            DefaultServiceResponse = Response<SubjectResultDto>.Valid(DefaultResponseContent);
+
+            SetupMockResponseServiceAdd(DefaultServiceResponse);
+            SetupMockResponseServiceUpdate(DefaultServiceResponse);
 
             SubjectController = new SubjectController(ServiceMock.Object, LoggerMock.Object);
         }
 
         #region Mocks
-        private void SetupServiceMockResponse(Response<SubjectResultDto> response)
+        private void SetupMockResponseServiceAdd(Response<SubjectResultDto> response)
+        {
+            ServiceMock
+                .Setup(service => service.Add(It.IsAny<SubjectInputDto>()))
+                .Returns(Task.FromResult(response));
+        }
+
+        private void SetupMockResponseServiceUpdate(Response<SubjectResultDto> response)
         {
             ServiceMock
                 .Setup(service => service.Update(It.IsAny<int>(), It.IsAny<SubjectInputDto>()))
                 .Returns(Task.FromResult(response));
         }
         #endregion
+
+        #region Add
+        [Fact]
+        public async Task CallAddFromServiceWhenAddNewStudentIsCalled()
+        {
+            // act
+            await SubjectController.AddNewSubject(DefaultSubjectInputDto);
+
+            // assert
+            ServiceMock.Verify(service => service.Add(DefaultSubjectInputDto));
+        }
+
+        [Fact]
+        public async Task ReturnBadRequestWhenResponseFromServiceIsInvalidWhenAddNewStudentIsCalled()
+        {
+            // arrange
+            var invalidServiceResponse = Response<SubjectResultDto>.Invalid(new List<string>());
+            SetupMockResponseServiceAdd(invalidServiceResponse);
+
+            // act
+            var result = await SubjectController.AddNewSubject(DefaultSubjectInputDto);
+
+            // assert
+            AssertController.BadRequest(result);
+        }
+
+        [Fact]
+        public async Task ReturnOkWhenResponseFromServiceIsValidWhenAddNewStudentIsCalled()
+        {
+            // act
+            var result = await SubjectController.AddNewSubject(DefaultSubjectInputDto);
+
+            // assert
+            AssertController.Ok(result, DefaultResponseContent);
+        }
+
+        [Fact]
+        public async Task ReturnInternalServerErrorWhenServiceThrowsException()
+        {
+            // arrange
+            ServiceMock
+                .Setup(service => service.Add(It.IsAny<SubjectInputDto>()))
+                .Throws<Exception>();
+
+            // act
+            var result = await SubjectController.AddNewSubject(DefaultSubjectInputDto);
+
+            // assert
+            AssertController.InternalServerError(result);
+        }
+        #endregion 
 
         #region GetAllSubjects
         [Fact]
@@ -52,7 +115,7 @@ namespace API.Web.Test
             await SubjectController.GetAllSubjects();
 
             // assert
-            ServiceMock.Verify(service => service.GetAll(), Times.Once);
+            ServiceMock.Verify(service => service.GetAll());
         }
 
         [Fact]
@@ -100,7 +163,7 @@ namespace API.Web.Test
             await SubjectController.GetSubject(DefaultSubjectId);
 
             // assert
-            ServiceMock.Verify(service => service.GetById(DefaultSubjectId), Times.Once);
+            ServiceMock.Verify(service => service.GetById(DefaultSubjectId));
         }
 
         [Fact]
@@ -159,7 +222,7 @@ namespace API.Web.Test
             await SubjectController.EditSubject(DefaultSubjectId, DefaultSubjectInputDto);
 
             // assert
-            ServiceMock.Verify(service => service.Update(DefaultSubjectId, It.IsAny<SubjectInputDto>()), Times.Once);
+            ServiceMock.Verify(service => service.Update(DefaultSubjectId, DefaultSubjectInputDto));
         }
 
         [Fact]
@@ -228,7 +291,7 @@ namespace API.Web.Test
         {
             // arrange
             var invalidResponse = Response<SubjectResultDto>.Invalid(new List<string>());
-            SetupServiceMockResponse(invalidResponse);
+            SetupMockResponseServiceUpdate(invalidResponse);
 
             // act
             var result = await SubjectController.EditSubject(DefaultSubjectId, DefaultSubjectInputDto);

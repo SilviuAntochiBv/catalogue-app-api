@@ -10,7 +10,10 @@ namespace API.Web.Controllers
     [Route("classes")]
     public class ClassController : AppControllerBase<IClassService, ClassController>
     {
-        public ClassController(IClassService service, ILogger<ClassController> logger) : base(service, logger)
+        public ClassController(
+            IClassService service, 
+            ILogger<ClassController> logger)
+            : base(service, logger)
         {
         }
         

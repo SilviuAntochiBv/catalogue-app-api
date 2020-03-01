@@ -12,6 +12,8 @@ using API.Data.Implementation.Specific;
 using API.Data.Interfaces;
 using API.Data.Interfaces.Specific;
 using API.Domain.Entities;
+using Microsoft.OpenApi.Models;
+using System.Text.Json;
 
 namespace API.Web.Extensions
 {
@@ -33,7 +35,8 @@ namespace API.Web.Extensions
                 })
                 .AddJsonOptions(options =>
                 {
-                    options.SerializerSettings.ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver();
+                    options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+                    options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
                 });
         }
 
@@ -41,13 +44,11 @@ namespace API.Web.Extensions
         {
             services.AddSwaggerGen(options =>
             {
-                options.DescribeAllEnumsAsStrings();
-                options.SwaggerDoc("v1", new Swashbuckle.AspNetCore.Swagger.Info
+                options.SwaggerDoc("v1", new OpenApiInfo
                 {
-                    Title = "Catalogue API", // TODO: modify
-                    Version = "v1", // TODO: modify
-                    Description = "Full API for a catalogue application", // TODO: modify
-                    TermsOfService = "Terms Of Service"
+                    Title = "Catalogue API",
+                    Version = "v1",
+                    Description = "Full API for a catalogue application",
                 });
             });
         }

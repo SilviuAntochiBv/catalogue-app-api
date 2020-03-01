@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace API.Web.Extensions
 {
@@ -13,11 +14,6 @@ namespace API.Web.Extensions
         {
             app.UseHealthChecks("/.well-known/live");
             app.UseHealthChecks("/.well-known/ready");
-        }
-
-        public static void ConfigureMvc(this IApplicationBuilder app)
-        {
-            app.UseMvc();
         }
 
         public static void ConfigureSwagger(this IApplicationBuilder app)
@@ -31,7 +27,7 @@ namespace API.Web.Extensions
             });
         }
 
-        public static void ConfigureExceptionHandlerMiddleware(this IApplicationBuilder app, IHostingEnvironment env)
+        public static void ConfigureExceptionHandlerMiddleware(this IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {

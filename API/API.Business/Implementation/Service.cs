@@ -109,15 +109,5 @@ namespace API.Business.Implementation
 
             return validationResult;
         }
-
-        protected Response<TData> CreateValidResponse<TData>(TData data)
-        {
-            return Response<TData>.Valid(data);
-        }
-
-        protected Response<TData> CreateInvalidResponse<TData>(ValidationResult invalidValidationResult)
-        {
-            return Response<TData>.Invalid(invalidValidationResult.Errors.Select(failure => $"{failure.ErrorCode}: {failure.ErrorMessage}"));
-        }
     }
 }

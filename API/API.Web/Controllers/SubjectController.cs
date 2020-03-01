@@ -10,12 +10,35 @@ using Microsoft.Extensions.Logging;
 
 namespace API.Web.Controllers
 {
+    [ApiController]
     [Route("subjects")]
     public class SubjectController : AppControllerBase<ISubjectService, SubjectController>
     {
         public SubjectController(ISubjectService service, ILogger<SubjectController> logger) : base(service, logger)
         {
         }
+
+        [HttpPost]
+        [ProducesResponseType(typeof(SubjectResultDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> AddNewSubject([FromBody]SubjectInputDto subjectInput)
+        {
+            try
+            {
+                var addResponse = await Service.Add(subjectInput);
+
+                if (!addResponse.IsValid)
+                    return BadRequest();
+
+                return Ok(addResponse.Data);
+            }
+            catch (Exception)
+            {
+                return InternalServerError();
+            }
+        }
+
 
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<SubjectResultDto>), StatusCodes.Status200OK)]
@@ -44,7 +67,9 @@ namespace API.Web.Controllers
                 var retrievedSubject = await Service.GetById(subjectId);
 
                 if (retrievedSubject == null)
+                {
                     return NotFound();
+                }
 
                 return Ok(retrievedSubject);
             }
@@ -60,17 +85,23 @@ namespace API.Web.Controllers
         public async Task<IActionResult> EditSubject(int subjectId, [FromBody]SubjectInputDto subjectInputDto)
         {
             if (!ModelState.IsValid || IsEditBodyInvalid(subjectInputDto))
+            {
                 return BadRequest();
+            }
 
             try
             {
                 var editSubjectResponse = await Service.Update(subjectId, subjectInputDto);
 
                 if (editSubjectResponse == null)
+                {
                     return NotFound();
+                }
 
                 if (!editSubjectResponse.IsValid)
+                {
                     return BadRequest();
+                }
 
                 return NoContent();
             }
@@ -79,11 +110,13 @@ namespace API.Web.Controllers
                 return InternalServerError();
             }
         }
-        
+
         private bool IsEditBodyInvalid(SubjectInputDto subjectInputDto)
         {
             if (subjectInputDto == null)
+            {
                 return true;
+            }
 
             return string.IsNullOrWhiteSpace(subjectInputDto.Name) && string.IsNullOrWhiteSpace(subjectInputDto.Description);
         }

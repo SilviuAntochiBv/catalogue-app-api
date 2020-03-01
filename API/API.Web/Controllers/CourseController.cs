@@ -9,7 +9,10 @@ namespace API.Web.Controllers
     [Route("courses")]
     public class CourseController : AppControllerBase<ICourseService, CourseController>
     {
-        public CourseController(ICourseService courseService, ILogger<CourseController> logger) : base(courseService, logger)
+        public CourseController(
+            ICourseService courseService, 
+            ILogger<CourseController> logger)
+            : base(courseService, logger)
         {
         }
 

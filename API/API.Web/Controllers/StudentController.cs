@@ -10,10 +10,14 @@ using Microsoft.Extensions.Logging;
 
 namespace API.Web.Controllers
 {
+    [ApiController]
     [Route("students")]
     public class StudentController : AppControllerBase<IStudentService, StudentController>
     {
-        public StudentController(IStudentService studentService, ILogger<StudentController> logger) : base(studentService, logger)
+        public StudentController(
+            IStudentService studentService, 
+            ILogger<StudentController> logger) 
+            : base(studentService, logger)
         {
         }
 
@@ -26,11 +30,6 @@ namespace API.Web.Controllers
         {
             try
             {
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest();
-                }
-
                 var result = await Service.Add(student);
 
                 if (!result.IsValid)
